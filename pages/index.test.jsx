@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import singletonRouter, { useRouter } from 'next/router';
 import Home from '.';
 import mockRouter from 'next-router-mock';
+let { expect } = require('chai')
 
 jest.mock('next/router', () => require('next-router-mock'));
 
