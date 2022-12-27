@@ -8,12 +8,12 @@ const tableHeader = [
     label: "Log Id",
   },
   {
-    id: "applicationType",
-    label: "Application Type",
-  },
-  {
     id: "applicationId",
     label: "Application Id",
+  },
+  {
+    id: "applicationType",
+    label: "Application Type",
   },
   {
     id: "actionType",
