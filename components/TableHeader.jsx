@@ -17,7 +17,7 @@ const tableHeader = [
   },
   {
     id: "actionType",
-    label: "Action Details",
+    label: "Action Type",
   },
   {
     id: "creationTimestamp",

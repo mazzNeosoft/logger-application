@@ -16,7 +16,7 @@ const Datepicker = ({ name, value, handleFields, removeQueryParam, setFormData, 
         <DesktopDatePicker
           name={name}
           inputFormat="YYYY-MM-DD"
-          label={name}
+          label={name[0].toUpperCase() + name.slice(1)}
           value={value || null}
           disableFuture={true}
           inputProps={{
