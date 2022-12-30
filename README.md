@@ -20,4 +20,4 @@ Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ## Link to the project
-https://jocular-tiramisu-2a9217.netlify.app/
+https://mazz-blogger-dashboard.netlify.app/
