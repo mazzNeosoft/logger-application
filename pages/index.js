@@ -20,6 +20,9 @@ import dayjs from "dayjs";
 import Datepicker from '../components/Datepicker';
 import { TableHeader } from '../components/TableHeader';
 import CircularProgress from '@mui/material/CircularProgress';
+import CustomInputField from '../components/CustomInputField';
+import SelectField from '../components/SelectField';
+
 
 const Home = () => {
   const lightTheme = createTheme({ palette: { mode: 'light' } });
@@ -154,6 +157,7 @@ const Home = () => {
     } else {
       name = event?.target?.name;
       value = event?.target?.value;
+      // console.log(name, value);
       setFormData({ ...formData, [name]: value })
       // router.replace({
       //   pathname: '/',
@@ -232,140 +236,46 @@ const Home = () => {
       <ThemeProvider theme={lightTheme}>
         <Paper elevation={3}>
           <div className="align">
-            <TextField
-              className='gap'
+            <CustomInputField
+              textLabel="Log ID"
               name="logId"
-              type="number"
-              label="Log Id"
-              value={logId || ""}
-              variant="outlined"
-              onChange={(e) => {
-                handleFields(e);
-              }}
-              InputProps={
-                formData?.logId && {
-                  endAdornment: (
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => {
-                        setFormData({ ...formData, logId: "" });
-                        removeQueryParam('logId');
-                      }}
-                      edge="end"
-                    >
-                      <ClearIcon />
-                    </IconButton>
-                  ),
-                }
-              }
+              value={formData?.logId}
+              formData={formData}
+              setFormData={setFormData}
+              removeQueryParam={removeQueryParam}
+              handleFields={handleFields}
             />
 
-            <TextField
-              className='gap'
+            <CustomInputField
+              textLabel="Application ID"
               name="applicationId"
-              type="text"
-              label="Application ID"
-              value={applicationId || ""}
-              variant="outlined"
-              onChange={(e) => {
-                handleFields(e);
-              }}
-              InputProps={
-                formData?.applicationId && {
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                    >
-                      <IconButton
-                        onClick={() => {
-                          setFormData({ ...formData, applicationId: "" });
-                          removeQueryParam('applicationId');
-                        }}
-                        edge="end"
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }
-              }
+              value={formData?.applicationId}
+              formData={formData}
+              setFormData={setFormData}
+              removeQueryParam={removeQueryParam}
+              handleFields={handleFields}
             />
 
-            <FormControl className='gap' fullWidth>
-              <InputLabel id="demo-simple-select-label">Application Type</InputLabel>
-              <Select
-                name="applicationType"
-                value={applicationType || ""}
-                label="Application Type"
-                onChange={(e) => {
-                  handleFields(e);
-                }}
-                endAdornment={
-                  applicationType && (
-                    <InputAdornment
-                      position="end"
-                      classes="iconButton"
-                    >
-                      <IconButton
-                        classes="iconButton"
-                        onClick={() => {
-                          setFormData({ ...formData, applicationType: "" });
-                          removeQueryParam('applicationType');
-                        }}
-                        edge="end"
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }
-              >
-                <MenuItem value="" disabled>Please select</MenuItem>
-                {
-                  appTypes?.map((i) => (
-                    <MenuItem key={i} value={i}>{i}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
-
-            <FormControl className='gap' fullWidth>
-              <InputLabel id="demo-simple-select-label">Action Type</InputLabel>
-              <Select
-                name="actionType"
-                value={actionType || ""}
-                label="Action Type"
-                onChange={(e) => {
-                  handleFields(e);
-                }}
-                endAdornment={
-                  actionType && (
-                    <InputAdornment
-                      position="end"
-                      classes="iconButton"
-                    >
-                      <IconButton
-                        classes="iconButton"
-                        onClick={() => {
-                          setFormData({ ...formData, actionType: "" });
-                          removeQueryParam('actionType');
-                        }}
-                        edge="end"
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }
-              >
-                <MenuItem value="" disabled>Please select</MenuItem>
-                {
-                  actionTypes?.map((i) => (
-                    <MenuItem key={i} value={i}>{i}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
+            <SelectField
+              textLable="Application Type"
+              name="applicationType"
+              value={applicationType || ""}
+              handleFields={handleFields}
+              formData={formData}
+              setFormData={setFormData}
+              removeQueryParam={removeQueryParam}
+              dataArr={appTypes}
+            />
+            <SelectField
+              textLable="Action Type"
+              name="actionType"
+              value={actionType || ""}
+              handleFields={handleFields}
+              formData={formData}
+              setFormData={setFormData}
+              removeQueryParam={removeQueryParam}
+              dataArr={actionTypes}
+            />
 
             <Datepicker
               name="from"

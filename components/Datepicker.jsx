@@ -15,6 +15,7 @@ const Datepicker = ({ name, value, handleFields, removeQueryParam, setFormData, 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DesktopDatePicker
           name={name}
+          size='small'
           inputFormat="YYYY-MM-DD"
           label={name[0].toUpperCase() + name.slice(1)}
           value={value || null}
@@ -28,12 +29,13 @@ const Datepicker = ({ name, value, handleFields, removeQueryParam, setFormData, 
 
           renderInput={(params) =>
             <>
-              <TextField {...params} />
+              <TextField {...params} size="small" />
               {value && (
                 <IconButton
+                  size="small"
                   style={{
-                    top: '8px',
-                    right: '44px',
+                    top: '3px',
+                    right: '55px',
                     position: 'absolute',
                   }}
                   onClick={() => {
