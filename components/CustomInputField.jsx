@@ -8,7 +8,7 @@ const CustomInputField = ({ name, formData, setFormData, removeQueryParam, handl
     <TextField
       className='gap'
       name={name}
-      type="number"
+      type="text"
       label={textLabel}
       size='small'
       value={value || ""}

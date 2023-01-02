@@ -46,12 +46,13 @@ const Home = () => {
   const removeQueryParam = (param) => {
     const params = new URLSearchParams(query);
     params.delete(param);
-    router.replace(
+    router.push(
       { pathname, query: params.toString() },
       undefined,
       { shallow: true }
     );
     filterData(`${param}_check`);
+    // setPage(0)
   };
 
   const handleChangePage = (event, newPage) => {
@@ -105,7 +106,7 @@ const Home = () => {
     if (to) {
       newQ = { ...newQ, to };
     }
-    router.replace({
+    router.push({
       pathname: '/',
       query: newQ,
     })
@@ -114,15 +115,30 @@ const Home = () => {
   }
 
   const matchLogic = (rowData, queryData, keyName, params) => {
-    return (rowData ?
-      (params === `${keyName}_check`)
-        ? rowData
-        : queryData
-          ? (rowData?.toString()).includes(queryData?.toString())
-          : rowData
-      : params === `${keyName}_check`
-        ? "null"
-        : queryData ? rowData : "null")
+    if (`${keyName}` === 'from' || `${keyName}` === 'to') {
+      return (rowData ?
+        (params === `${keyName}_check`)
+          ? rowData
+          : queryData
+            ? (`${keyName}_check` === 'from_check'
+              ? rowData >= queryData
+              : rowData <= queryData + 1)
+            : rowData
+        : params === `${keyName}_check`
+          ? "null"
+          : queryData ? rowData : "null")
+    } else {
+      return (rowData ?
+        (params === `${keyName}_check`)
+          ? rowData
+          : queryData
+            ? (rowData?.toString()).includes(queryData?.toString())
+            : rowData
+        : params === `${keyName}_check`
+          ? "null"
+          : queryData ? rowData : "null")
+    }
+
   }
 
   const filterData = (params = "", updatedParams) => {
@@ -139,9 +155,10 @@ const Home = () => {
       && matchLogic(i?.applicationId, applicationId, 'applicationId', params)
       && matchLogic(i?.applicationType, applicationType, 'applicationType', params)
       && matchLogic(i?.actionType, actionType, 'actionType', params)
-      && (i?.creationTimestamp >= (from ? from : i?.creationTimestamp))
-      && (i?.creationTimestamp <= (to ? to + 1 : i?.creationTimestamp))
+      && matchLogic(i?.creationTimestamp, from, 'from', params)
+      && matchLogic(i?.creationTimestamp, to, 'to', params)
     ));
+    setPage(0)
     setfilteredData(filteredData);
   }
 
@@ -194,6 +211,7 @@ const Home = () => {
       from: query?.from || null,
       to: query?.to || null
     };
+    setFormData(obj);
     router.beforePopState((res) => {
       const url = res?.as.startsWith('/') ? res?.as.slice(1) : res?.as;
       const params = new URLSearchParams(url);
@@ -205,9 +223,9 @@ const Home = () => {
         from: params.get('from') || null,
         to: params.get('to') || null
       }
+      setFormData(obj);
       filterData("", obj);
     });
-    setFormData(obj);
   }, [router])
 
   useEffect(() => {
@@ -319,7 +337,7 @@ const Home = () => {
                               <TableCell> {item.applicationId || '-'}</TableCell>
                               <TableCell> {item.applicationType || '-'}</TableCell>
                               <TableCell> {item.actionType || '-'} </TableCell>
-                              <TableCell>{dayjs(item.creationTimestamp).format("YYYY-MM-DD") || '-'}</TableCell>
+                              <TableCell>{item.creationTimestamp || '-'}</TableCell>
                             </TableRow>
                           ))
                       }
