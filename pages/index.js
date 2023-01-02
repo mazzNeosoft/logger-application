@@ -150,19 +150,10 @@ const Home = () => {
     let value = "";
     if (fields) {
       setFormData({ ...formData, [fields]: dayjs(event).format("YYYY-MM-DD") })
-      // router.push({
-      //   pathname: '/',
-      //   query: { ...router.query, [fields]: dayjs(event).format("YYYY-MM-DD") },
-      // })
     } else {
       name = event?.target?.name;
       value = event?.target?.value;
-      // console.log(name, value);
       setFormData({ ...formData, [name]: value })
-      // router.replace({
-      //   pathname: '/',
-      //   query: { ...router.query, [name]: value },
-      // })
     }
   };
   const sortData = (order, orderBy) => (
