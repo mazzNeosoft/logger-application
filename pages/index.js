@@ -1,28 +1,15 @@
 import Head from 'next/head'
 import Paper from '@mui/material/Paper';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
-import TablePagination from "@mui/material/TablePagination";
-import { Button, IconButton, InputAdornment, Box } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
+import { Button, Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import ClearIcon from '@mui/icons-material/Clear';
 import dayjs from "dayjs";
 import Datepicker from '../components/Datepicker';
-import { TableHeader } from '../components/TableHeader';
 import CircularProgress from '@mui/material/CircularProgress';
 import CustomInputField from '../components/CustomInputField';
 import SelectField from '../components/SelectField';
-
+import TableComponent from '../components/TableComponent';
 
 const Home = () => {
   const lightTheme = createTheme({ palette: { mode: 'light' } });
@@ -34,8 +21,8 @@ const Home = () => {
 
   const [page, setPage] = useState(0);
   const ROWS_PER_PAGE = 10;
-  const [order, setOrder] = useState("");
-  const [orderBy, setOrderBy] = useState("asc");
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("logId");
 
   const [appTypes, setappTypes] = useState([]);
   const [actionTypes, setactionTypes] = useState([]);
@@ -52,7 +39,7 @@ const Home = () => {
       { shallow: true }
     );
     filterData(`${param}_check`);
-    // setPage(0)
+    setPage(0)
   };
 
   const handleChangePage = (event, newPage) => {
@@ -173,15 +160,21 @@ const Home = () => {
       setFormData({ ...formData, [name]: value })
     }
   };
+
   const sortData = (order, orderBy) => (
     (a, b) => {
-      if (a[orderBy] === b[orderBy]) return 0;
-      if (a[orderBy] === null) return 1;
-      if (b[orderBy] === null) return -1;
+      if (order === 'asc') {
+        if (a[orderBy] === null) return -1;
+        if (b[orderBy] === null) return 1;
+      } else {
+        if (a[orderBy] === null) return 1;
+        if (b[orderBy] === null) return -1;
+      }
       if (order === 'asc') return a[orderBy] < b[orderBy] ? -1 : 1;
       return a[orderBy] < b[orderBy] ? 1 : -1;
     }
   );
+
   const handleSort = (property) => {
     setPage(0)
     const isAsc = orderBy === property && order === "asc";
@@ -193,8 +186,8 @@ const Home = () => {
     setFormData({})
     router.replace('/', undefined, { shallow: true });
     setPage(0)
-    setOrder("")
-    setOrderBy("asc");
+    setOrder("asc")
+    setOrderBy("logId");
     setfilteredData(tableData);
   }
 
@@ -316,41 +309,15 @@ const Home = () => {
               <CircularProgress color="success" />
             </Box> :
               <>
-                <TableContainer>
-                  <Table size="small">
-                    <TableHeader
-                      order={order}
-                      orderBy={orderBy}
-                      sortHandler={handleSort}
-                    />
-                    <TableBody>
-                      {
-                        filteredData
-                          .sort(sortData(order, orderBy))
-                          .slice(
-                            page * ROWS_PER_PAGE,
-                            page * ROWS_PER_PAGE + ROWS_PER_PAGE
-                          )
-                          .map((item, i) => (
-                            <TableRow key={i}>
-                              <TableCell> {item.logId || '-'}</TableCell>
-                              <TableCell> {item.applicationId || '-'}</TableCell>
-                              <TableCell> {item.applicationType || '-'}</TableCell>
-                              <TableCell> {item.actionType || '-'} </TableCell>
-                              <TableCell>{item.creationTimestamp || '-'}</TableCell>
-                            </TableRow>
-                          ))
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  component="div"
-                  count={filteredData?.length}
+                <TableComponent
+                  order={order}
+                  orderBy={orderBy}
+                  handleSort={handleSort}
+                  filteredData={filteredData}
                   page={page}
                   rowsPerPage={ROWS_PER_PAGE}
-                  rowsPerPageOptions={[10]}
-                  onPageChange={handleChangePage}
+                  handleChangePage={handleChangePage}
+                  sortData={sortData}
                 />
               </>
           }
